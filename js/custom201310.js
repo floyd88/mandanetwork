@@ -2,8 +2,9 @@ try {
     console.log('we loaded');
 
     $('.wpbdp-listing').each(function(idx, el) {
-        console.log($(el).attr('id'));
-        console.log(idx);
+        var parts = $(el).attr('id').split('-'),
+            id = parts[parts.length-1];
+        console.log(id);
     });
 
 } catch(e) {
