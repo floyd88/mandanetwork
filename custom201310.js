@@ -1,0 +1,1 @@
+try {    console.log('we loaded');    $('.wpbdp-listing').each(function(idx, el) {        console.log(el);    });} catch(e) {    console.log('we goofed');    console.log(e);}
