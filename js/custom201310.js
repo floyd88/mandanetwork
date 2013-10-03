@@ -4,7 +4,7 @@ try {
         $.ajax({
             type:"GET",
             dataType : "json",
-            url: "/wp-admin/admin-ajax.php?action=get_mandanetwork_user_meta",
+            url: "/13thacg/wp-admin/admin-ajax.php?action=get_mandanetwork_user_meta",
             success: callback
         });
     };
@@ -13,7 +13,7 @@ try {
         $.ajax({
             type:"POST",
             dataType : "json",
-            url: "/wp-admin/admin-ajax.php",
+            url: "/13thacg/wp-admin/admin-ajax.php",
             data: ({
                 action : 'update_mandanetwork_user_meta',
                 data: JSON.stringify(data)
@@ -30,12 +30,7 @@ try {
             data = {};
 
         getMeta(function(resp) {
-            if(resp.type == "success") {
-                console.log("success");
-            } else {
-                console.log("error");
-                console.log('getMeta resp', resp);
-            }
+            console.log("getMeta resp", resp);
         });
 
         console.log('clicked', id, name, checked);
