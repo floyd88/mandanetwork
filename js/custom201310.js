@@ -1,16 +1,22 @@
 try {
-    console.log('we loaded');
 
-    function updateProfile(data, callback) {
+    function getMeta(callback) {
+        $.ajax({
+            type:"GET",
+            dataType : "json",
+            url: "/wp-admin/admin-ajax.php?action=get_mandanetwork_user_meta",
+            success: callback
+        });
+    };
+
+    function updateMeta(data, callback) {
         $.ajax({
             type:"POST",
+            dataType : "json",
             url: "/wp-admin/admin-ajax.php",
             data: ({
-                action : 'update',
-                aim: JSON.stringify(data),
-                user_id: 3,
-                submit: 'Update Profile',
-                checkuser_id: 3
+                action : 'update_mandanetwork_user_meta',
+                data: JSON.stringify(data)
             }),
             success: callback
         });
@@ -23,18 +29,24 @@ try {
             name = $el.find('input').attr('name'),
             data = {};
 
+        getMeta(function(resp) {
+            if(resp.type == "success") {
+                console.log("success");
+            } else {
+                console.log("error");
+                console.log('getMeta resp', resp);
+            }
+        });
+
         console.log('clicked', id, name, checked);
         // e.g. {1234: {visited: true, selected:false}}
         data[id] = {}
         data[id][name] = checked;
 
-        updateProfile(data, function(err, data) {
-            if (err) {
-                console.log('error', err);
-                // if error just uncheck
-                return $el.find('input').prop('checked', false);
-            }
-            console.log('success ajax');
+        updateMeta(data, function(results) {
+            //console.log('results', results);
+            // if error just uncheck
+            //return $el.find('input').prop('checked', false);
         });
     };
 
@@ -46,7 +58,7 @@ try {
         ).on('click', onClickCheckbox);
         var visited  = $(
             '<div><label for="visited">Visited '
-            + '<input type="checkbox" name="selected" data-id="'+id+'"/>'
+            + '<input type="checkbox" name="visited" data-id="'+id+'"/>'
             + '</label></div>'
         ).on('click', onClickCheckbox);
         var div = $('<div class=".field-value" />')
