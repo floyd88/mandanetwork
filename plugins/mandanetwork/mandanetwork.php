@@ -25,7 +25,7 @@ function get_mandanetwork_user_meta() {
 
 function must_login() {
     echo "You must log in to vote";
-    wp_die(0);
+    wp_die(1);
 }
 
 add_action("wp_ajax_update_mandanetwork_user_meta", "update_mandanetwork_user_meta");
