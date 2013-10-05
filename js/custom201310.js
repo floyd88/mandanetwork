@@ -3,6 +3,18 @@ try {
     var PATH = '/13thacg/wp-admin/admin-ajax.php',
         cache = {};
 
+    function getPosts(ids, callback) {
+        var url = PATH + '?action=get_mandanetwork_exhibitors';
+        url += '&post_ids=' + ids.join(',');
+        $.ajax({
+            type: 'GET',
+            url: url,
+            success: function(resp, txtStatus, xhr) {
+                callback(resp);
+            }
+        });
+    };
+
     function getMeta(callback) {
         if (cache.user_meta) {
             return callback(cache.user_meta);
@@ -11,7 +23,7 @@ try {
             type: 'GET',
             dataType : 'json',
             url: PATH + '?action=get_mandanetwork_user_meta',
-            success: function(resp) {
+            success: function(resp, txtStatus, xhr) {
                 // cache user meta on first call so subsequent updates are
                 // faster
                 cache.user_meta = resp;
@@ -99,18 +111,62 @@ try {
         $(el).find('.field-value').last().after(div);
     };
 
-    getMeta(function(resp) {
-        if (typeof resp !== 'object' || !resp.success) {
-            // request failed
-            return;
-        }
-        $('.wpbdp-listing').each(function(idx, el) {
-            var parts = $(el).attr('id').split('-'),
-                id = parts[parts.length-1],
-                data = resp.data[0] || {};
-            addSelectElementsToListing(el, id, data[id] || {});
+    function onClickSelectedListings(ev) {
+        getMeta(function(resp) {
+            var ids = [];
+            $.each(resp.data[0], function(key, val) {
+                if (val.selected && val.selected == "true") {
+                    ids.push(key);
+                }
+            });
+            getPosts(ids, function(resp) {
+                $('.wpbdp-view-listings-page .listings').html(resp);
+                initExcerpts();
+            });
         });
-    });
+    }
+
+    function onClickVisitedListings(ev) {
+        getMeta(function(resp) {
+            var ids = [];
+            $.each(resp.data[0], function(key, val) {
+                if (val.visited && val.visited == "true") {
+                    ids.push(key);
+                }
+            });
+            getPosts(ids, function(resp) {
+                $('.wpbdp-view-listings-page .listings').html(resp);
+                initExcerpts();
+            });
+        });
+    }
+
+    var selBtn = $(
+        '<input id="wpbdp-bar-show-selected-button" type="button"'
+        + ' value="Selected Listings" class="button" />'
+    ).on('click', onClickSelectedListings).appendTo($('.wpbdp-main-links'));
+
+    var visBtn = $(
+        '<input id="wpbdp-bar-show-visited-button" type="button"'
+        + ' value="Visited Listings" class="button" />'
+    ).on('click', onClickVisitedListings).appendTo($('.wpbdp-main-links'));
+
+    function initExcerpts() {
+        getMeta(function(resp) {
+            if (typeof resp !== 'object' || !resp.success) {
+                // request failed
+                return;
+            }
+            $('.wpbdp-listing').each(function(idx, el) {
+                var parts = $(el).attr('id').split('-'),
+                    id = parts[parts.length-1],
+                    data = resp.data[0] || {};
+                addSelectElementsToListing(el, id, data[id] || {});
+            });
+        });
+    }
+
+    initExcerpts();
 
 } catch(e) {
     console.log('oops');
