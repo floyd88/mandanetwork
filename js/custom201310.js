@@ -66,7 +66,7 @@ try {
         // merge with existing data
         getMeta(function(resp) {
             var data = {};
-            console.log('getMeta resp', JSON.stringify(resp));
+            console.log('getMeta resp', JSON.stringify(resp,null,2));
             if (typeof resp === 'object' && resp.success) {
                 data = resp.data[0] || {};
             } else {
@@ -90,17 +90,35 @@ try {
 
     };
 
+    function isVisited(data) {
+        if (!data || !data.visited) {
+            return false;
+        }
+        if (data.visited == true || data.visited == "true") {
+            return true;
+        }
+    }
+
+    function isSelected(data) {
+        if (!data || !data.selected) {
+            return false;
+        }
+        if (data.selected == true || data.selected == "true") {
+            return true;
+        }
+    }
+
     function addSelectElementsToListing(el, id, data) {
         console.log('addSelectedElementsToListing', id, data);
 
-        var checked = data.selected === 'true' ? ' checked="checked"' : '';
+        var checked = isSelected(data) ? ' checked="checked"' : '';
         var selected = $(
             '<div><label for="selected">Selected '
             + '<input type="checkbox" name="selected" data-id="'+id+'"'
             + checked + ' /></label></div>'
         ).on('click', onClickCheckbox);
 
-        checked = data.visited === 'true' ? ' checked="checked"' : '';
+        checked = isVisited(data) ? ' checked="checked"' : '';
         var visited  = $(
             '<div><label for="visited">Visited '
             + '<input type="checkbox" name="visited" data-id="'+id+'"'
@@ -115,7 +133,7 @@ try {
         getMeta(function(resp) {
             var ids = [];
             $.each(resp.data[0], function(key, val) {
-                if (val.selected && val.selected == "true") {
+                if (isSelected(val)) {
                     ids.push(key);
                 }
             });
@@ -130,7 +148,7 @@ try {
         getMeta(function(resp) {
             var ids = [];
             $.each(resp.data[0], function(key, val) {
-                if (val.visited && val.visited == "true") {
+                if (isVisited(val)) {
                     ids.push(key);
                 }
             });
