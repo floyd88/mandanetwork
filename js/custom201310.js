@@ -49,12 +49,11 @@ try {
         });
     };
 
-    function onClickCheckbox(ev) {
+    function onChangeSelectOption(ev) {
         var $el = $(this),
-            $input = $el.find('input'),
-            checked = $input.is(':checked'),
-            id = $input.attr('data-id'),
-            name = $input.attr('name');
+            $select = $el.find('select'),
+            state = $select.find('option:selected').val(),
+            id = $select.attr('data-id');
 
         function handleError(e) {
             if (e) console.log(e);
@@ -75,35 +74,50 @@ try {
             if (!data[id]) {
                 data[id] = {};
             }
-            // set and save checked value for this exhibitor id
-            data[id][name] = checked;
-            //$input.attr('disabled', 'disabled');
+            // set and state value for this exhibitor id
+            data[id]['state'] = state;
+            //$select.attr('disabled', 'disabled');
             updateMeta(data, function(resp) {
                 console.log('updateMeta resp', resp);
                 //$input.attr('disabled', false);
                 if (typeof resp !== 'object' || !resp.success) {
                     return handleError();
                 }
-                console.log('saved', id, name, checked);
+                console.log('saved', id, state);
+                updateCounts(data);
             });
         });
 
     };
 
+    function getSelectedCount(data) {
+        var cnt = 0;
+        $.each(data, function(key, val) {
+            if (val.state && val.state === "selected") {
+                cnt++;
+            }
+        });
+        return cnt;
+    }
+
+    function getVisitedCount(data) {
+        var cnt = 0;
+        $.each(data, function(key, val) {
+            if (val.state && val.state === "visited") {
+                cnt++;
+            }
+        });
+        return cnt;
+    }
+
     function isVisited(data) {
-        if (!data || !data.visited) {
-            return false;
-        }
-        if (data.visited == true || data.visited == "true") {
+        if (data && data.state && data.state == "visited") {
             return true;
         }
     }
 
     function isSelected(data) {
-        if (!data || !data.selected) {
-            return false;
-        }
-        if (data.selected == true || data.selected == "true") {
+        if (data && data.state && data.state == "selected") {
             return true;
         }
     }
@@ -111,21 +125,18 @@ try {
     function addSelectElementsToListing(el, id, data) {
         console.log('addSelectedElementsToListing', id, data);
 
-        var checked = isSelected(data) ? ' checked="checked"' : '';
-        var selected = $(
-            '<div><label for="selected">Selected '
-            + '<input type="checkbox" name="selected" data-id="'+id+'"'
-            + checked + ' /></label></div>'
-        ).on('click', onClickCheckbox);
+        var s_attrs = isSelected(data) ? ' selected="selected"' : '';
+        var v_attrs = isVisited(data) ? ' selected="selected"' : '';
+        var state = $(
+            '<div>'
+            + '<select name="state" data-id="'+id+'">'
+            + '<option value=""></option>'
+            + '<option value="selected" ' + s_attrs + '>Selected</option>'
+            + '<option value="visited" ' + v_attrs + '>Visited</option>'
+            + '</select></div>'
+        ).on('change', onChangeSelectOption);
 
-        checked = isVisited(data) ? ' checked="checked"' : '';
-        var visited  = $(
-            '<div><label for="visited">Visited '
-            + '<input type="checkbox" name="visited" data-id="'+id+'"'
-            + checked + ' /></label></div>'
-        ).on('click', onClickCheckbox);
-        var div = $('<div class=".field-value" />')
-            .append(selected).append(visited);
+        var div = $('<div class=".field-value" />').append(state);
         $(el).find('.field-value').last().after(div);
     };
 
@@ -159,26 +170,36 @@ try {
         });
     }
 
-    var selBtn = $(
+    var $selBtn = $(
         '<input id="wpbdp-bar-show-selected-button" type="button"'
         + ' value="Selected Listings" class="button" />'
     ).on('click', onClickSelectedListings).appendTo($('.wpbdp-main-links'));
 
-    var visBtn = $(
+    var $visBtn = $(
         '<input id="wpbdp-bar-show-visited-button" type="button"'
         + ' value="Visited Listings" class="button" />'
     ).on('click', onClickVisitedListings).appendTo($('.wpbdp-main-links'));
+
+    function updateCounts(data) {
+        $selBtn.attr(
+            'value', 'Selected Listings ('+ getSelectedCount(data) + ')'
+        );
+        $visBtn.attr(
+            'value', 'Visited Listings ('+ getVisitedCount(data) + ')'
+        );
+    }
 
     function initExcerpts() {
         getMeta(function(resp) {
             if (typeof resp !== 'object' || !resp.success) {
                 // request failed
-                return;
+                return console.log('request failed', resp);
             }
+            var data = resp.data[0] || {};
+            updateCounts(data);
             $('.wpbdp-listing').each(function(idx, el) {
                 var parts = $(el).attr('id').split('-'),
-                    id = parts[parts.length-1],
-                    data = resp.data[0] || {};
+                    id = parts[parts.length-1];
                 addSelectElementsToListing(el, id, data[id] || {});
             });
         });
