@@ -54,17 +54,40 @@
         });
     };
 
-    function onChangeSelectOption(ev) {
-        var $el = $(this),
-            $select = $el.find('select'),
-            state = $select.find('option:selected').val(),
-            id = $select.attr('data-id');
+    function cycleBtn(ev) {
+        ev.preventDefault();
+        var $btn = $(this).find('.btn'),
+            state = $btn.attr('data-state') || '',
+            id = $btn.attr('data-id'),
+            $icon = $btn.find('i');
+
+        if (state === '') {
+            new_state = 'selected';
+            $btn.attr('class', 'btn btn-warning');
+            $btn.attr('data-state', new_state);
+            $btn.attr('style', '');
+            $icon.attr('class', 'icon-star');
+        } else if (state === 'selected') {
+            new_state = 'visited';
+            $btn.attr('class', 'visited btn btn-primary');
+            $btn.attr('data-state', new_state);
+            $btn.find('.state-label').text('Visited');
+            $btn.attr('style', '');
+            $icon.attr('class', 'icon-ok icon-white');
+        } else if (state === 'visited') {
+            new_state = '';
+            $btn.attr('class', 'default btn');
+            $btn.attr('data-state', new_state);
+            $btn.attr('style', 'color:#ccc;');
+            $btn.find('.state-label').text('Favorite');
+            $icon.attr('class', 'icon-star icon-white');
+        }
 
         function handleError(e) {
             if (e) console.log(e);
             if (e && e.stack) console.log(e.stack);
             // return to original checked setting if error
-            return $input.prop('checked', !checked);
+            // todo return $input.prop('checked', !checked);
         };
 
         // merge with existing data
@@ -80,18 +103,17 @@
                 data[id] = {};
             }
             // set and state value for this exhibitor id
-            data[id]['state'] = state;
+            data[id]['state'] = new_state;
             //$select.attr('disabled', 'disabled');
             updateMeta(data, function(resp) {
                 //$input.attr('disabled', false);
                 if (typeof resp !== 'object' || !resp.success) {
                     return handleError();
                 }
-                console.log('saved', id, state);
+                console.log('saved', id, new_state);
                 updateCounts(data);
             });
         });
-
     };
 
     function getSelectedCount(data) {
@@ -126,23 +148,40 @@
         }
     }
 
+    function getStateValue(data) {
+        return data && data.state;
+    }
+
+    function getBtn(state, id) {
+        if (state === '') {
+            return '<div class="btn-group">'
+                + '<a style="color:#ccc;" class="default btn" href="#" data-id="'+id+'" data-state="'+state+'">'
+                + '<i class="icon-star icon-white"></i>'
+                + ' <span class="state-label">Favorite</span></a>'
+                + '</div>';
+        } else if (state === 'selected') {
+            return '<div class="btn-group">'
+                + '<a class="default btn btn-warning" href="#" data-id="'+id+'" data-state="'+state+'">'
+                + '<i class="icon-star"></i>'
+                + ' <span class="state-label">Favorite</span></a>'
+                + '</div>';
+        } else if (state === 'visited') {
+            return '<div class="btn-group">'
+                + '<a class="default btn btn-primary" href="#" data-id="'+id+'" data-state="'+state+'">'
+                + '<i class="icon-ok icon-white"></i>'
+                + ' <span class="state-label">Visited</span></a>'
+                + '</div>';
+        }
+    }
+
     function addSelectElementsToListing(el, id, data) {
         //console.log('addSelectedElementsToListing', id, data);
-
-        var s_attrs = isSelected(data) ? ' selected="selected"' : '';
-        var v_attrs = isVisited(data) ? ' selected="selected"' : '';
-        var state = $(
-            '<div>'
-            + '<select name="state" data-id="'+id+'">'
-            + '<option value=""></option>'
-            + '<option value="selected" ' + s_attrs + '>Selected</option>'
-            + '<option value="visited" ' + v_attrs + '>Visited</option>'
-            + '</select></div>'
-        ).on('change', onChangeSelectOption);
-
-        var div = $('<div class=".field-value" />').append(state);
+        var val = getStateValue(data) || '';
+        var div = $('<div class="field-value" />').append(
+            $(getBtn(val, id)).on('click', cycleBtn)
+        );
         $(el).find('.field-value').last().after(div);
-    };
+    }
 
     function onClickSelectedListings(ev) {
         getMeta(function(resp) {
