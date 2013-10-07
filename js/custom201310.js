@@ -1,17 +1,25 @@
-try {
+(function(jQuery) {
+
+    /*! jQuery Ajax Queue v0.1.2pre | (c) 2013 Corey Frang | Licensed MIT */
+    (function(e){var r=e({});e.ajaxQueue=function(n){function t(r){u=e.ajax(n),u.done(a.resolve).fail(a.reject).then(r,r)}var u,a=e.Deferred(),i=a.promise();return r.queue(t),i.abort=function(o){if(u)return u.abort(o);var c=r.queue(),f=e.inArray(t,c);return f>-1&&c.splice(f,1),a.rejectWith(n.context||n,[i,o,""]),i},i}})(jQuery);
 
     var PATH = '/13thacg/wp-admin/admin-ajax.php',
-        cache = {};
+        cache = {},
+        $ = jQuery;
+
+    function setCache(key, data) {
+        //console.log('setCache', key, data);
+        cache[key] = data;
+    };
 
     function getPosts(ids, callback) {
         var url = PATH + '?action=get_mandanetwork_exhibitors';
         url += '&post_ids=' + ids.join(',');
-        $.ajax({
+        $.ajaxQueue({
             type: 'GET',
-            url: url,
-            success: function(resp, txtStatus, xhr) {
-                callback(resp);
-            }
+            url: url
+        }).done(function(resp, txtStatus, xhr) {
+            callback(resp);
         });
     };
 
@@ -19,33 +27,30 @@ try {
         if (cache.user_meta) {
             return callback(cache.user_meta);
         }
-        $.ajax({
+        $.ajaxQueue({
             type: 'GET',
             dataType : 'json',
-            url: PATH + '?action=get_mandanetwork_user_meta',
-            success: function(resp, txtStatus, xhr) {
-                // cache user meta on first call so subsequent updates are
-                // faster
-                cache.user_meta = resp;
-                callback(resp);
-            }
+            url: PATH + '?action=get_mandanetwork_user_meta'
+        }).done(function(resp, txtStatus, xhr) {
+            // cache user meta on first call so subsequent updates are
+            // faster
+            setCache('user_meta', resp);
+            callback(resp);
         });
     };
 
     function updateMeta(data, callback) {
-        console.log('updateMeta data', data);
-        $.ajax({
+        $.ajaxQueue({
             type: 'POST',
             dataType : 'json',
             url: PATH,
             data: ({
                 action : 'update_mandanetwork_user_meta',
                 data: data
-            }),
-            success: function(resp) {
-                cache.user_meta = {success:true, data:[data]};
-                callback(resp);
-            }
+            })
+        }).done(function(resp) {
+            setCache('user_meta', {success:true, data:[data]});
+            callback(resp);
         });
     };
 
@@ -65,7 +70,7 @@ try {
         // merge with existing data
         getMeta(function(resp) {
             var data = {};
-            console.log('getMeta resp', JSON.stringify(resp,null,2));
+            //console.log('getMeta resp', JSON.stringify(resp,null,2));
             if (typeof resp === 'object' && resp.success) {
                 data = resp.data[0] || {};
             } else {
@@ -78,7 +83,6 @@ try {
             data[id]['state'] = state;
             //$select.attr('disabled', 'disabled');
             updateMeta(data, function(resp) {
-                console.log('updateMeta resp', resp);
                 //$input.attr('disabled', false);
                 if (typeof resp !== 'object' || !resp.success) {
                     return handleError();
@@ -123,7 +127,7 @@ try {
     }
 
     function addSelectElementsToListing(el, id, data) {
-        console.log('addSelectedElementsToListing', id, data);
+        //console.log('addSelectedElementsToListing', id, data);
 
         var s_attrs = isSelected(data) ? ' selected="selected"' : '';
         var v_attrs = isVisited(data) ? ' selected="selected"' : '';
@@ -207,8 +211,4 @@ try {
 
     initExcerpts();
 
-} catch(e) {
-    console.log('oops');
-    console.log(e);
-    console.log(e.stack);
-}
+})(jQuery);
