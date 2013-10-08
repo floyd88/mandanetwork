@@ -1,0 +1,28 @@
+.wpbdp-listing-excerpt .listing-favorite-btn {
+  float: right;
+  clear: both;
+}
+.wpbdp-listing-excerpt .listing-favorite-btn .btn {
+  z-index: 2;
+}
+.wpbdp-listing-excerpt .listing-favorite-btn .btn-group {
+  margin: 10px;
+}
+.wpbdp-listing-excerpt .listing-favorite-btn .default.btn {
+  color: #ccc;
+}
+.wpbdp-listing-excerpt.odd .field-value.content,
+.wpbdp-listing-excerpt.even .field-value.content {
+  background: transparent;
+}
+/* put categories in dropdown */
+#wpbdp-categories {
+  display: none;
+}
+/* hide view listing button, redundant */
+#wpbdp-bar-view-listings-button {
+  display: none;
+}
+#wpbdmsearchform #intextbox {
+  margin-bottom: 9px;
+}

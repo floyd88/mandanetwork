@@ -63,22 +63,19 @@
 
         if (state === '') {
             new_state = 'selected';
-            $btn.attr('class', 'btn btn-warning');
+            $btn.attr('class', 'selected btn btn-warning');
             $btn.attr('data-state', new_state);
-            $btn.attr('style', '');
             $icon.attr('class', 'icon-star');
         } else if (state === 'selected') {
             new_state = 'visited';
             $btn.attr('class', 'visited btn btn-primary');
             $btn.attr('data-state', new_state);
             $btn.find('.state-label').text('Visited');
-            $btn.attr('style', '');
             $icon.attr('class', 'icon-ok icon-white');
         } else if (state === 'visited') {
             new_state = '';
             $btn.attr('class', 'default btn');
             $btn.attr('data-state', new_state);
-            $btn.attr('style', 'color:#ccc;');
             $btn.find('.state-label').text('Favorite');
             $icon.attr('class', 'icon-star icon-white');
         }
@@ -155,19 +152,19 @@
     function getBtn(state, id) {
         if (state === '') {
             return '<div class="btn-group">'
-                + '<a style="color:#ccc;" class="default btn" href="#" data-id="'+id+'" data-state="'+state+'">'
+                + '<a class="default btn" href="#" data-id="'+id+'" data-state="'+state+'">'
                 + '<i class="icon-star icon-white"></i>'
                 + ' <span class="state-label">Favorite</span></a>'
                 + '</div>';
         } else if (state === 'selected') {
             return '<div class="btn-group">'
-                + '<a class="default btn btn-warning" href="#" data-id="'+id+'" data-state="'+state+'">'
+                + '<a class="selected btn btn-warning" href="#" data-id="'+id+'" data-state="'+state+'">'
                 + '<i class="icon-star"></i>'
                 + ' <span class="state-label">Favorite</span></a>'
                 + '</div>';
         } else if (state === 'visited') {
             return '<div class="btn-group">'
-                + '<a class="default btn btn-primary" href="#" data-id="'+id+'" data-state="'+state+'">'
+                + '<a class="visited btn btn-primary" href="#" data-id="'+id+'" data-state="'+state+'">'
                 + '<i class="icon-ok icon-white"></i>'
                 + ' <span class="state-label">Visited</span></a>'
                 + '</div>';
@@ -177,10 +174,10 @@
     function addSelectElementsToListing(el, id, data) {
         //console.log('addSelectedElementsToListing', id, data);
         var val = getStateValue(data) || '';
-        var div = $('<div class="field-value" />').append(
+        var div = $('<div class="listing-favorite-btn field-value" />').append(
             $(getBtn(val, id)).on('click', cycleBtn)
         );
-        $(el).find('.field-value').last().after(div);
+        $(el).find('.listing-thumbnail').last().after(div);
     }
 
     function onClickSelectedListings(ev) {
@@ -215,7 +212,7 @@
 
     var $selBtn = $(
         '<input id="wpbdp-bar-show-selected-button" type="button"'
-        + ' value="Selected Listings" class="button" />'
+        + ' value="Favorite Listings" class="button" />'
     ).on('click', onClickSelectedListings).appendTo($('.wpbdp-main-links'));
 
     var $visBtn = $(
@@ -225,11 +222,16 @@
 
     function updateCounts(data) {
         $selBtn.attr(
-            'value', 'Selected Listings ('+ getSelectedCount(data) + ')'
+            'value', 'Favorite Listings ('+ getSelectedCount(data) + ')'
         );
         $visBtn.attr(
             'value', 'Visited Listings ('+ getVisitedCount(data) + ')'
         );
+    }
+
+    function initCategories() {
+        $('#wpbdp-categories li').each(function() {
+        });
     }
 
     function initExcerpts() {
