@@ -15,14 +15,23 @@
 .wpbdp-listing-excerpt.even .field-value.content {
   background: transparent;
 }
-/* put categories in dropdown */
-#wpbdp-categories {
+/* hide categories they are on separate page */
+.wpbdp-page-content #wpbdp-categories {
   display: none;
 }
-/* hide view listing button, redundant */
-#wpbdp-bar-view-listings-button {
+/* hide everything on categories page except categories */
+#business-directory-categories .wpbdp-bar,
+#business-directory-categories #wpbdp-view-listings-page {
+  display: none;
+}
+#business-directory-categories #wpbdp-categories {
+  display: block;
+}
+/* hide view listing/directory buttons; redundant */
+#wpbdp-bar-view-listings-button,
+#wpbdp-bar-show-directory-button {
   display: none;
 }
 #wpbdmsearchform #intextbox {
-  margin-bottom: 9px;
+  margin-bottom: 0;
 }
