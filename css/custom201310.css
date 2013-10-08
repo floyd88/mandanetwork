@@ -28,8 +28,7 @@
   display: block;
 }
 /* hide view listing/directory buttons; redundant */
-#wpbdp-bar-view-listings-button,
-#wpbdp-bar-show-directory-button {
+#wpbdp-bar-view-listings-button {
   display: none;
 }
 #wpbdmsearchform #intextbox {
