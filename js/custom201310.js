@@ -229,11 +229,6 @@
         );
     }
 
-    function initCategories() {
-        $('#wpbdp-categories li').each(function() {
-        });
-    }
-
     function initExcerpts() {
         getMeta(function(resp) {
             if (typeof resp !== 'object' || !resp.success) {
