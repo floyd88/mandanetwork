@@ -33,6 +33,10 @@
 .wpbdp-listing-single .listing-details .field-value {
   display: block;
 }
+/* hide more button on single/detail page */
+.wpbdp-listing-single .listing-more-btn {
+  display: none;
+}
 /* hide categories they are on separate page */
 .wpbdp-page-content #wpbdp-categories {
   display: none;
