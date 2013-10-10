@@ -337,10 +337,24 @@
         });
     }
 
+    function initExhibitorsTable() {
+        $('#tablepress-1 .column-2').each(function(idx, el) {
+            var $td = $(this),
+                text = $td.text(),
+                $link = $('<a/>');
+            $link.attr('href', '/business-directory/?action=search&dosrch=1&q='
+                + encodeURIComponent(text)
+            ).text(text);
+            $td.text('');
+            $td.append($link);
+        });
+    }
+
     $(function() {
         loadLibs();
         initPdbLinks();
         initExcerpts();
+        initExhibitorsTable();
     });
 
     function loadLibs() {
