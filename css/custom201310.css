@@ -34,6 +34,15 @@
 .wpbdp-page-content #wpbdp-categories {
   display: none;
 }
+/* float search form left and minimize padding */
+.wpbdp-bar .wpbdp-search-form {
+  float: right;
+  margin: 0;
+}
+form#wpbdmsearchform {
+  padding: 0;
+  text-align: right;
+}
 /* hide everything on categories page except categories */
 #business-directory-categories .wpbdp-bar,
 #business-directory-categories #wpbdp-view-listings-page {
