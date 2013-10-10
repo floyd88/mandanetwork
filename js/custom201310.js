@@ -168,13 +168,45 @@
         }
     }
 
+    function toggleExcerptDetails(ev) {
+        ev.preventDefault();
+        console.log('toggleExcerptDetails');
+        var $listing = $(this).closest('.wpbdp-listing-excerpt'),
+            $btn = $listing.find('.listing-more-btn .btn'),
+            label = $btn.text();
+        $listing.find(
+            '.listing-thumbnail'
+            + ',.wpbdp-field-equitydescription'
+            + ',.wpbdp-field-fundname'
+            + ',.wpbdp-field-industries'
+            + ',.wpbdp-field-professionalcontact'
+            + ',.wpbdp-field-title'
+            + ',.wpbdp-field-address'
+            + ',.wpbdp-field-website'
+            + ',.wpbdp-field-areasofinterest'
+        ).toggle();
+        if (label === 'Hide Details') {
+            $btn.text('Show Details');
+        } else {
+            $btn.text('Hide Details');
+        }
+    }
+
     function addSelectElementsToListing(el, id, data) {
         //console.log('addSelectedElementsToListing', id, data);
         var val = getStateValue(data) || '';
-        var div = $('<div class="listing-favorite-btn field-value" />').append(
+        var favDiv = $('<div class="listing-favorite-btn field-value" />').append(
             $(getBtn(val, id)).on('click', cycleBtn)
         );
-        $(el).find('.listing-thumbnail').last().after(div);
+        /* append more button */
+        var $moreBtn = $(
+            '<div class="btn-group">'
+            + '<a class="selected btn btn-small" href="#">Show Details</a>'
+            + '</div>'
+        );
+        var moreDiv = $('<div class="listing-more-btn field-value" />')
+            .append($moreBtn).on('click', toggleExcerptDetails);
+        $(el).find('.listing-thumbnail').last().after(moreDiv).after(favDiv);
     }
 
     function onClickSelectedListings(ev) {
@@ -215,14 +247,14 @@
 
     var $selBtn = $(
         '<button id="wpbdp-bar-show-selected-button" class="ladda-button btn" '
-        + ' data-style="expand-right"><span class="ladda-label">'
-        + 'Favorite Listings</span></button>'
+        + ' data-style="expand-right" data-spinner-color="#555">'
+        + '<pan class="ladda-label">Favorite Listings</span></button>'
     ).on('click', onClickSelectedListings).appendTo($('.wpbdp-main-links'));
 
     var $visBtn = $(
         '<button id="wpbdp-bar-show-visited-button" class="ladda-button btn" '
-        + ' data-style="expand-right"><span class="ladda-label">'
-        + 'Visited Listings</span></button>'
+        + ' data-style="expand-right" data-spinner-color="#555">'
+        + '<span class="ladda-label">Visited Listings</span></button>'
     ).on('click', onClickVisitedListings).appendTo($('.wpbdp-main-links'));
 
     function updateCounts(data) {
