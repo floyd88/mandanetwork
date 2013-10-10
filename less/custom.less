@@ -1,0 +1,256 @@
+.section-branding .branding_wrap {
+  background-color: #67bc29;
+}
+.content .content-pad {
+  padding-bottom: 0;
+}
+.section-navbar .content-pad {
+  padding-top: 0;
+}
+.navbar.navbar-content-width {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+/* make even rows grey */
+.pdb-list {
+  tr {
+    padding: 10px;
+  }
+  tr:nth-child(odd) {
+    background-color: #eee;
+  }
+}
+/* fix pagination block on small screens */
+.pdb-list + .pagination {
+  overflow: visible;
+}
+body { padding-top:0px;}
+
+
+/* applies to screen/viewport width of 960 or less. */
+@media screen and (max-width: 960px) {
+.pdb-list {
+  td, tr, th {
+    display: block;
+  }
+  thead, tfoot {
+    display: none;
+  }
+  tr td > * {
+    //padding: 0;
+  }
+  tr td {
+    padding: 0;
+    
+  }
+  .cell-hide {
+    display: none;
+  }
+  // first name
+  tr td:nth-child(1) {
+    display: inline;
+    padding-right: 5px;
+    //content: 'First Name: ';
+    //font-weight: bold;
+  }
+  // last name
+  tr td:nth-child(2) {
+    display: inline;
+    padding-left: 0;
+    //content: 'Last Name: ';
+    //font-weight: bold;
+  }
+
+  // company
+  tr td:nth-child(3){}
+  // title
+  tr td:nth-child(4){}
+  // address 
+  tr td:nth-child(5){
+      .cell-hide;
+  }
+  // city
+  tr td:nth-child(6){.cell-hide;}
+  // state
+  tr td:nth-child(7){.cell-hide;}
+  // zip code
+  tr td:nth-child(8){.cell-hide;}
+  // phone
+  tr td:nth-child(9){}
+  // email
+  tr td:nth-child(10){}
+  // profession
+  tr td:nth-child(11){}
+  // status
+  tr td:nth-child(12){.cell-hide;}
+    
+ }
+ .navbar.navbar-content-width {
+   width: 100%;
+ }
+ .navbar .navbar-title {
+   font-size: 13px;
+ }
+
+} // close media query
+
+#highlight 
+.highlight-head {
+line-height: 1.3em;
+font-size: 20.68px;
+}
+#page .hentry .hentry-pad {
+    padding: 0px;
+}
+#highlight .copy-pad .highlight-area {
+    padding: 0px;
+}
+#highlight {
+text-align: left;
+}
+#site #page, #site #dynamic-content {
+    min-height: 0px;
+}
+#page {
+    margin-top: 45%;
+}
+body.page-id-1529 #page .page-canvas {
+    background: none repeat scroll 0 0 transparent;
+}
+#page .section-sb_fullwidth .content {
+    max-width: 100%;
+}
+#page .section-sb_fullwidth h3.widget-title {
+    color: #ededed;
+    text-align: right;
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+}
+body { padding-top:0px;}
+#page {
+    margin-top: 0;
+}
+
+/*
+ * splash page
+ */
+
+.page-id-1529 .content .content-pad {
+    padding: 0;
+}
+.page-id-1529 .widget .widget-pad {
+    background: none repeat scroll 0 0 #000000;
+    padding: 10px;
+}
+.section-branding .icons {
+  height: 0;
+}
+.content .content-pad {
+  padding: 0;
+}
+.post-1529 {
+  margin: 0;
+}
+.splash-font {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  font-size: 34px;
+  line-height: 36px;
+}
+.splash-font-btn {
+  .splash-font;
+  font-size: 24px;
+  line-height: 24px;
+}
+.page-id-1529 {
+  .section-content-area {
+    margin-top: 34%;
+  }
+  .thepage .content {
+    height: 100px;
+    background-color: black;
+    /* Fallback for web browsers that don't support RGBa */
+    background-color: rgb(0, 0, 0);
+    /* RGBa with 0.6 opacity */
+    background-color: rgba(0, 0, 0, 0.6);
+    /* For IE 5.5 - 7*/
+ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000,endColorstr=#99000000);
+  /* For IE 8*/
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000,endColorstr=#99000000)";
+  }
+  #site .content {
+    max-width: 100%;
+  }
+  .entry_wrap {
+    //  width: 1000px;
+  }
+  .entry_content {
+    p:first-child {
+      float: right;
+      overflow: hidden;
+      color: #ccc;
+      .splash-font;
+      padding-right: 5px;
+    }
+    img {
+      float: left;
+      width: 150px;
+      overflow: none; 
+    }
+    .btn-success {
+      position: absolute;
+      bottom: -50px;
+      right: 20px;
+      .splash-font-btn;
+    }
+    .pledit {
+      display: none;
+    }
+  }
+}
+/* 
+ * splash for small screens
+ */
+@media screen and (max-width: 960px) {
+ .page-id-1529 {
+   .entry_content {
+     p:first-child {
+       font-size: 20px;
+       line-height: 22px;
+       margin: 0 0 20px 0;
+     }
+     .btn-success {
+        font-size: 15px;
+     }
+   }
+   #site .content {
+     width: 100%;
+     .content-pad {
+        padding: 0;
+     }
+   }
+   .section-content-area {
+     margin-top: 10%;
+   }
+   .thepage .content {
+     height: 80px;
+   }
+  }
+}
+/*
+ * Splash Page in Landscape mode
+ */
+@media only screen and (min-width: 321px) {
+  .page-id-1529 {
+   .entry_content {
+     p:first-child {
+       font-size: 26px;
+       line-height: 28px;
+     }
+   }
+   .thepage .content {
+     height: 90px;
+   }
+  }
+}

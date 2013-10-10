@@ -20,6 +20,10 @@ Footer Scripts & Analytics:
 <script type="text/javascript" src="//mandanetwork.com/media/custom201310.js" />
 ```
 
+Less code:
+
+Copy less code from less/custom.less to the custom css/less area in PageLines.
+
 ## Install Plugin
 
 1) Create a directory for the mandanetwork plugin, `wp-content/plugins/mandanetwork` then copy the 
