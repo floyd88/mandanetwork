@@ -40,6 +40,8 @@
   margin: 0;
 }
 form#wpbdmsearchform {
+  /* hide search form until page loads */
+  display: none;
   padding: 0;
   text-align: right;
 }
@@ -51,14 +53,25 @@ form#wpbdmsearchform {
 #business-directory-categories #wpbdp-categories {
   display: block;
 }
-/* hide view listing/directory buttons; redundant */
-#wpbdp-bar-view-listings-button {
-  display: none;
-}
 #wpbdmsearchform #intextbox {
   margin-bottom: 0;
 }
 
+/* 
+ * small screens
+ **/
+@media screen and (max-width: 960px) {
+  /* remove padding so wbdp buttons fit better at top */
+  .fullwidth #column-main .mcolumn-pad {
+    padding: 0;
+  }
+  #wpbdp-main-page .wpbdp-main-links {
+    padding-bottom: 10px;
+  }
+  #wpbdp-main-page .wpbdp-main-links button.btn {
+    margin-left: 5px;
+  }
+}
 
 /*
  * Ladda

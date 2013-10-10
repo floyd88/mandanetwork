@@ -248,25 +248,38 @@
     var $selBtn = $(
         '<button id="wpbdp-bar-show-selected-button" class="ladda-button btn" '
         + ' data-style="expand-right" data-spinner-color="#555">'
-        + '<pan class="ladda-label">Favorite Listings</span></button>'
+        + '<span class="ladda-label">Favorites</span></button>'
     ).on('click', onClickSelectedListings).appendTo($('.wpbdp-main-links'));
 
     var $visBtn = $(
         '<button id="wpbdp-bar-show-visited-button" class="ladda-button btn" '
         + ' data-style="expand-right" data-spinner-color="#555">'
-        + '<span class="ladda-label">Visited Listings</span></button>'
+        + '<span class="ladda-label">Visited</span></button>'
     ).on('click', onClickVisitedListings).appendTo($('.wpbdp-main-links'));
 
     function updateCounts(data) {
         $selBtn.find('.ladda-label').text(
-            'Favorite Listings ('+ getSelectedCount(data) + ')'
+            'Favorites ('+ getSelectedCount(data) + ')'
         );
         $visBtn.find('.ladda-label').text(
-            'Visited Listings ('+ getVisitedCount(data) + ')'
+            'Visited ('+ getVisitedCount(data) + ')'
         );
     }
 
+    /**
+     * Transform text into a URL slug: spaces turned into dashes, remove non
+     * alphanumeric.
+     *
+     * @param string text
+     */
+    var slugify = function(text) {
+        return text.trim().replace(/[^\-a-zA-Z0-9,&\.]+/ig, '-');
+    }
+
     function initExcerpts() {
+        // update search submit button label so it's shorter
+        $('#wpbdmsearchsubmit').attr('value', 'Search');
+        $('form#wpbdmsearchform').show();
         getMeta(function(resp) {
             if (typeof resp !== 'object' || !resp.success) {
                 // request failed
@@ -282,10 +295,24 @@
         });
     }
 
-    loadLibs();
-    initExcerpts();
+    function initPdbLinks() {
+        $('.pdb-list tr td:nth-child(3)').each(function(idx, el) {
+            var $td = $(el),
+                $a = $('<a />'),
+                slug = slugify($td.text()).toLowerCase();
+            $a.attr('href', "../business-directory/" + slug);
+            $a.text($td.text());
+            $td.html($a);
+        });
+    }
 
-function loadLibs() {
+    $(function() {
+        loadLibs();
+        initPdbLinks();
+        initExcerpts();
+    });
+
+    function loadLibs() {
 
 /*! jQuery Ajax Queue v0.1.2pre | (c) 2013 Corey Frang | Licensed MIT */
 (function(e){var r=e({});e.ajaxQueue=function(n){function t(r){u=e.ajax(n),u.done(a.resolve).fail(a.reject).then(r,r)}var u,a=e.Deferred(),i=a.promise();return r.queue(t),i.abort=function(o){if(u)return u.abort(o);var c=r.queue(),f=e.inArray(t,c);return f>-1&&c.splice(f,1),a.rejectWith(n.context||n,[i,o,""]),i},i}})(jQuery);
