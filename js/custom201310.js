@@ -311,6 +311,10 @@
         // update search submit button label so it's shorter
         $('#wpbdmsearchsubmit').attr('value', 'Search');
         $('form#wpbdmsearchform').show();
+        if ($('.wpbdp-listing').length <= 0) {
+            /* only run on pages with wpdb-listing */
+            return;
+        }
         getMeta(function(err, resp) {
             if (err) {
                 console.log('request failed', err, resp);
