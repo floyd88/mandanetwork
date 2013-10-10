@@ -342,6 +342,10 @@
             var $td = $(this),
                 text = $td.text(),
                 $link = $('<a/>');
+            if ($td.find('a').length > 0) {
+                /* if we find a link leave it alone */
+                return;
+            }
             $link.attr('href', '/business-directory/?action=search&dosrch=1&q='
                 + encodeURIComponent(text)
             ).text(text);
