@@ -1,21 +1,21 @@
-.wpbdp-listing-excerpt .listing-favorite-btn,
-.wpbdp-listing-excerpt .listing-more-btn {
+.wpbdp-listing .listing-favorite-btn,
+.wpbdp-listing .listing-more-btn {
   float: right;
   clear: both;
 }
-.wpbdp-listing-excerpt .listing-favorite-btn .btn,
-.wpbdp-listing-excerpt .listing-more-btn .btn {
+.wpbdp-listing .listing-favorite-btn .btn,
+.wpbdp-listing .listing-more-btn .btn {
   z-index: 2;
 }
-.wpbdp-listing-excerpt .listing-favorite-btn .btn-group,
-.wpbdp-listing-excerpt .listing-more-btn .btn-group {
+.wpbdp-listing .listing-favorite-btn .btn-group,
+.wpbdp-listing .listing-more-btn .btn-group {
   margin: 10px;
 }
-.wpbdp-listing-excerpt .listing-favorite-btn .default.btn {
+.wpbdp-listing .listing-favorite-btn .default.btn {
   color: #ccc;
 }
-.wpbdp-listing-excerpt.odd .field-value.content,
-.wpbdp-listing-excerpt.even .field-value.content {
+.wpbdp-listing .listing-details .field-value,
+.wpbdp-listing-excerpt .field-value.content {
   background: transparent;
 }
 .wpbdp-listing .listing-details .field-value {
@@ -29,7 +29,10 @@
 .field-value.wpbdp-field-company.title {
   display: block;
 }
-
+/* show all fields on listing detail page */
+.wpbdp-listing-single .listing-details .field-value {
+  display: block;
+}
 /* hide categories they are on separate page */
 .wpbdp-page-content #wpbdp-categories {
   display: none;

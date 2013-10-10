@@ -33,6 +33,7 @@
         }).done(function(data, txtStatus, xhr) {
             // cache user meta on first call so subsequent updates are
             // faster
+            console.log('getMeta done', data);
             setCache('user_meta', data);
             callback(null, data);
         });
@@ -49,6 +50,7 @@
             }),
             error: callback
         }).done(function(resp) {
+            console.log('updateMeta done', resp);
             setCache('user_meta', {success:true, data:[data]});
             callback(null, resp);
         });
@@ -185,7 +187,6 @@
 
     function toggleExcerptDetails(ev) {
         ev.preventDefault();
-        console.log('toggleExcerptDetails');
         var $listing = $(this).closest('.wpbdp-listing-excerpt'),
             $btn = $listing.find('.listing-more-btn .btn'),
             label = $btn.text();
@@ -213,7 +214,7 @@
         var favDiv = $('<div class="listing-favorite-btn field-value" />').append(
             $(getBtn(val, id)).on('click', cycleBtn)
         );
-        /* append more button */
+        /* append show/hide details button */
         var $moreBtn = $(
             '<div class="btn-group">'
             + '<a class="selected btn btn-small" href="#">Show Details</a>'
@@ -311,8 +312,8 @@
         $('#wpbdmsearchsubmit').attr('value', 'Search');
         $('form#wpbdmsearchform').show();
         getMeta(function(err, resp) {
-            if (typeof resp !== 'object' || !resp.success) {
-                console.log('request failed', resp);
+            if (err) {
+                console.log('request failed', err, resp);
                 return alert('request failed');
             }
             var data = resp.data[0] || {};
