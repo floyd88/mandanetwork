@@ -5,7 +5,7 @@
         $ = jQuery;
 
     function setCache(key, data) {
-        //console.log('setCache', key, data);
+        console.log('setCache', key, data);
         cache[key] = data;
     };
 
@@ -14,25 +14,27 @@
         url += '&post_ids=' + ids.join(',');
         $.ajaxQueue({
             type: 'GET',
-            url: url
+            url: url,
+            error: callback
         }).done(function(resp, txtStatus, xhr) {
-            callback(resp);
+            callback(null, resp);
         });
     };
 
     function getMeta(callback) {
         if (cache.user_meta) {
-            return callback(cache.user_meta);
+            return callback(null, $.extend({}, cache.user_meta));
         }
         $.ajaxQueue({
             type: 'GET',
             dataType : 'json',
-            url: PATH + '?action=get_mandanetwork_user_meta'
-        }).done(function(resp, txtStatus, xhr) {
+            url: PATH + '?action=get_mandanetwork_user_meta',
+            error: callback
+        }).done(function(data, txtStatus, xhr) {
             // cache user meta on first call so subsequent updates are
             // faster
-            setCache('user_meta', resp);
-            callback(resp);
+            setCache('user_meta', data);
+            callback(null, data);
         });
     };
 
@@ -44,32 +46,33 @@
             data: ({
                 action : 'update_mandanetwork_user_meta',
                 data: data
-            })
+            }),
+            error: callback
         }).done(function(resp) {
             setCache('user_meta', {success:true, data:[data]});
-            callback(resp);
+            callback(null, resp);
         });
     };
 
     function cycleBtn(ev) {
         ev.preventDefault();
         var $btn = $(this).find('.btn'),
-            state = $btn.attr('data-state') || '',
+            orig_state = $btn.attr('data-state') || '',
             id = $btn.attr('data-id'),
             $icon = $btn.find('i');
 
-        if (state === '') {
+        if (orig_state === '') {
             new_state = 'selected';
             $btn.attr('class', 'selected btn btn-warning');
             $btn.attr('data-state', new_state);
             $icon.attr('class', 'icon-star');
-        } else if (state === 'selected') {
+        } else if (orig_state === 'selected') {
             new_state = 'visited';
             $btn.attr('class', 'visited btn btn-primary');
             $btn.attr('data-state', new_state);
             $btn.find('.state-label').text('Visited');
             $icon.attr('class', 'icon-ok icon-white');
-        } else if (state === 'visited') {
+        } else if (orig_state === 'visited') {
             new_state = '';
             $btn.attr('class', 'default btn');
             $btn.attr('data-state', new_state);
@@ -81,28 +84,40 @@
             if (e) console.log(e);
             if (e && e.stack) console.log(e.stack);
             // return to original checked setting if error
-            // todo return $input.prop('checked', !checked);
+            if (orig_state === '') {
+                $btn.attr('class', 'default btn');
+                $btn.attr('data-state', orig_state);
+                $btn.find('.state-label').text('Favorite');
+                $icon.attr('class', 'icon-star icon-white');
+            } else if (orig_state === 'selected') {
+                $btn.attr('class', 'selected btn btn-warning');
+                $btn.attr('data-state', orig_state);
+                $icon.attr('class', 'icon-star');
+                $btn.find('.state-label').text('Favorite');
+            } else if (orig_state === 'visited') {
+                $btn.attr('class', 'visited btn btn-primary');
+                $btn.attr('data-state', orig_state);
+                $btn.find('.state-label').text('Visited');
+                $icon.attr('class', 'icon-ok icon-white');
+            }
+            alert('request failed');
         };
 
         // merge with existing data
-        getMeta(function(resp) {
+        getMeta(function(err, resp) {
             var data = {};
-            //console.log('getMeta resp', JSON.stringify(resp,null,2));
-            if (typeof resp === 'object' && resp.success) {
-                data = resp.data[0] || {};
-            } else {
-                return handleError();
+            if (err) {
+                return handleError(err);
             }
+            data = resp.data[0] || {};
             if (!data[id]) {
                 data[id] = {};
             }
-            // set and state value for this exhibitor id
+            // set state value for this exhibitor id
             data[id]['state'] = new_state;
-            //$select.attr('disabled', 'disabled');
-            updateMeta(data, function(resp) {
-                //$input.attr('disabled', false);
-                if (typeof resp !== 'object' || !resp.success) {
-                    return handleError();
+            updateMeta(data, function(err, xhr) {
+                if (err) {
+                    return handleError(err);
                 }
                 console.log('saved', id, new_state);
                 updateCounts(data);
@@ -212,14 +227,22 @@
     function onClickSelectedListings(ev) {
         var btn = Ladda.create(this);
         btn.start();
-        getMeta(function(resp) {
+        getMeta(function(err, resp) {
             var ids = [];
+            if (err) {
+                console.log('request failed', err, resp);
+                return alert('request failed');
+            }
             $.each(resp.data[0], function(key, val) {
                 if (isSelected(val)) {
                     ids.push(key);
                 }
             });
-            getPosts(ids, function(resp) {
+            getPosts(ids, function(err, resp) {
+                if (err) {
+                    console.log('request failed', err, resp);
+                    alert('request failed');
+                }
                 $('.wpbdp-view-listings-page .listings').html(resp);
                 initExcerpts();
                 btn.stop();
@@ -230,14 +253,21 @@
     function onClickVisitedListings(ev) {
         var btn = Ladda.create(this);
         btn.start();
-        getMeta(function(resp) {
+        getMeta(function(err, resp) {
             var ids = [];
+            if (err) {
+                return alert('request failed');
+            }
             $.each(resp.data[0], function(key, val) {
                 if (isVisited(val)) {
                     ids.push(key);
                 }
             });
-            getPosts(ids, function(resp) {
+            getPosts(ids, function(err, resp) {
+                if (err) {
+                    console.log('request failed', err, resp);
+                    alert('request failed');
+                }
                 $('.wpbdp-view-listings-page .listings').html(resp);
                 initExcerpts();
                 btn.stop();
@@ -280,10 +310,10 @@
         // update search submit button label so it's shorter
         $('#wpbdmsearchsubmit').attr('value', 'Search');
         $('form#wpbdmsearchform').show();
-        getMeta(function(resp) {
+        getMeta(function(err, resp) {
             if (typeof resp !== 'object' || !resp.success) {
-                // request failed
-                return console.log('request failed', resp);
+                console.log('request failed', resp);
+                return alert('request failed');
             }
             var data = resp.data[0] || {};
             updateCounts(data);
