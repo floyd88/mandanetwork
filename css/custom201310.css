@@ -1,7 +1,9 @@
+html {
+  margin-top: 0 !important;
+}
 .wpbdp-listing .listing-favorite-btn,
 .wpbdp-listing .listing-more-btn {
   float: right;
-  clear: both;
 }
 .wpbdp-listing .listing-favorite-btn .btn,
 .wpbdp-listing .listing-more-btn .btn {
@@ -14,9 +16,16 @@
 .wpbdp-listing .listing-favorite-btn .default.btn {
   color: #ccc;
 }
+.wpbdp-listing .listing-details {
+  float: left;
+}
 .wpbdp-listing .listing-details .field-value,
 .wpbdp-listing-excerpt .field-value.content {
   background: transparent;
+}
+.wpbdp-listing-excerpt .listing-actions {
+  margin-top: 10px;
+  float: right;
 }
 .wpbdp-listing .listing-details .field-value {
   display: none;
@@ -28,6 +37,7 @@
 }
 .field-value.wpbdp-field-company.title {
   display: block;
+  padding-top: 15px;
 }
 /* show all fields on listing detail page */
 .wpbdp-listing-single .listing-details .field-value {

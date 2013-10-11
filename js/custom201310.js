@@ -363,6 +363,10 @@
         initPdbLinks();
         initExcerpts();
         initExhibitorsTable();
+        /* add margin if wpadminbar is present */
+        if ($('#wpadminbar').length > 0) {
+            $('html').attr('style', 'margin-top: 28px !important');
+        }
     });
 
     function loadLibs() {
