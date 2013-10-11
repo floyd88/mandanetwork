@@ -24,19 +24,19 @@ html {
   background: transparent;
 }
 .wpbdp-listing-excerpt .listing-actions {
-  margin-top: 10px;
-  float: right;
+  display: none;
 }
 .wpbdp-listing .listing-details .field-value {
   display: none;
 }
 /* minimize excerpt display and use more button to expand */
-.wpbdp-listing .listing-details .field-value,
+.wpbdp-listing-excerpt .listing-details .field-value,
 .wpbdp-listing-excerpt .listing-thumbnail {
   display: none;
 }
 .field-value.wpbdp-field-company.title {
-  display: block;
+  display: inline;
+  float: left;
   padding-top: 15px;
 }
 /* show all fields on listing detail page */
