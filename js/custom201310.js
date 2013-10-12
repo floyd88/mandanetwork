@@ -315,6 +315,8 @@
             /* only run on pages with wpdb-listing */
             return;
         }
+        /* turn next/prev links into buttons */
+        $('.wpbdp-pagination .next a, .wpbdp-pagination .prev a').addClass('btn');
         getMeta(function(err, resp) {
             if (err) {
                 console.log('request failed', err, resp);
