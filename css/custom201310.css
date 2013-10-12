@@ -88,6 +88,17 @@ form#wpbdmsearchform {
   #wpbdp-main-page .wpbdp-main-links button.btn {
     margin-left: 5px;
   }
+  /* on first page put login at the top */
+  .page-id-82 #loginwithajaxwidget-2 {
+    position: absolute;
+    top: 0;
+  }
+  .page-id-82 #pagelines_content {
+    padding-top: 200px;
+  }
+  .page-id-82.logged-in #pagelines_content {
+    padding-top: 100px;
+  }
 }
 
 /*
