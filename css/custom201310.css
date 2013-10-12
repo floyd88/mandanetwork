@@ -73,7 +73,11 @@ form#wpbdmsearchform {
 #wpbdmsearchform #intextbox {
   margin-bottom: 0;
 }
-
+/* fix attendees list overflowing off content area */
+.wrap.pdb-list.participants-database {
+  width: 100%;
+  overflow: auto;
+}
 /* 
  * small screens
  **/
