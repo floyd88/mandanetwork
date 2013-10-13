@@ -5,14 +5,14 @@ html {
 .wpbdp-listing-excerpt {
   position: relative;
 }
-.wpbdp-listing .listing-favorite-btn {
-  right: 0;
-  top: -5px;
-}
-.wpbdp-listing-excerpt .listing-favorite-btn,
+.wpbdp-listing .listing-favorite-btn,
 .wpbdp-listing .listing-full-profile {
   position: absolute;
   top: 0;
+}
+.wpbdp-listing .listing-favorite-btn {
+  right: 0;
+  top: -2px;
 }
 .wpbdp-listing-excerpt.listing-excerpt-expanded .listing-full-profile,
 .wpbdp-listing-excerpt .listing-favorite-btn {
@@ -120,11 +120,29 @@ form#wpbdmsearchform {
  * small screens
  **/
 @media screen and (max-width: 960px) {
+  .wpbdp-listing-excerpt.listing-excerpt-expanded .listing-favorite-btn {
+    top: -2px;
+  }
+  .wpbdp-listing {
+    padding: 5px;
+  }
+  .wpbdp-listing-excerpt .listing-thumbnail {
+    padding-top: 80px;
+  }
+  .wpbdp-listing-excerpt.listing-excerpt-expanded .listing-full-profile {
+    top: 40px;
+  }
+  .wpbdp-listing-excerpt.listing-excerpt-expanded .listing-favorite-btn {
+    right: 0;
+  }
+  .wpbdp-listing-excerpt.listing-excerpt-expanded .listing-favorite-btn {
+    right: 0;
+  }
   .wpbdp-listing-excerpt.listing-excerpt-expanded .listing-details {
     width: 100%;
   }
   /* hide favorite label on mobile */
-  .wpbdp-listing-excerpt .listing-favorite-btn .state-label {
+  .wpbdp-listing .listing-favorite-btn .state-label {
     display: none;
   }
   /* remove padding so wbdp buttons fit better at top */

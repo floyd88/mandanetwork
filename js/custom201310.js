@@ -210,7 +210,7 @@
         $toggle.find('a').on('click', toggleExcerptDetails);
         $title.find('a').on('click', toggleExcerptDetails);
         $title.after($toggle);
-        var $profileLink = $('<a>See profile with portfolio</a>').attr(
+        var $profileLink = $('<a>See full profile</a>').attr(
             'href', $title.find('a').attr('href')
         );
         $listing.find('.listing-thumbnail').last().after(favDiv).after(
