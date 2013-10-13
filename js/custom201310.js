@@ -360,7 +360,8 @@
 
     $(function() {
         loadLibs();
-        initPdbLinks();
+        //disable for now
+        //initPdbLinks();
         initExcerpts();
         initExhibitorsTable();
         /* add margin if wpadminbar is present */
