@@ -188,41 +188,36 @@
     function toggleExcerptDetails(ev) {
         ev.preventDefault();
         var $listing = $(this).closest('.wpbdp-listing-excerpt'),
-            $btn = $listing.find('.listing-more-btn .btn'),
-            label = $btn.text();
-        $listing.find(
-            '.listing-thumbnail'
-            + ',.wpbdp-field-equitydescription'
-            + ',.wpbdp-field-fundname'
-            + ',.wpbdp-field-industries'
-            + ',.wpbdp-field-professionalcontact'
-            + ',.wpbdp-field-title'
-            + ',.wpbdp-field-address'
-            + ',.wpbdp-field-website'
-            + ',.wpbdp-field-areasofinterest'
-        ).toggle();
-        if (label === 'Hide Details') {
-            $btn.text('Show Details');
+            $toggleLink = $listing.find('.wpbdp-field-company.title .toggle a');
+            label = $toggleLink.text();
+        $listing.toggleClass('listing-excerpt-expanded');
+        if (label === 'Hide') {
+            $toggleLink.text('');
         } else {
-            $btn.text('Hide Details');
+            $toggleLink.text('Hide');
         }
     }
 
-    function addSelectElementsToListing(el, id, data) {
+    function updateListingElements(el, id, data) {
         //console.log('addSelectedElementsToListing', id, data);
-        var val = getStateValue(data) || '';
+        var val = getStateValue(data) || '',
+            $listing = $(el),
+            $title = $listing.find('.field-value.wpbdp-field-company.title .value');
         var favDiv = $('<div class="listing-favorite-btn field-value" />').append(
             $(getBtn(val, id)).on('click', cycleBtn)
         );
-        /* append show/hide details button */
-        var $moreBtn = $(
-            '<div class="btn-group">'
-            + '<a class="selected btn btn-small" href="#">Show Details</a>'
-            + '</div>'
+        var $toggle = $('<span class="toggle"> (<a href="#"></a>)</span>');
+        $toggle.find('a').on('click', toggleExcerptDetails);
+        $title.find('a').on('click', toggleExcerptDetails);
+        $title.after($toggle);
+        var $profileLink = $('<a>See profile with portfolio</a>').attr(
+            'href', $title.find('a').attr('href')
         );
-        var moreDiv = $('<div class="listing-more-btn field-value" />')
-            .append($moreBtn).on('click', toggleExcerptDetails);
-        $(el).find('.listing-thumbnail').last().after(moreDiv).after(favDiv);
+        $listing.find('.listing-thumbnail').last().after(favDiv).after(
+            $('<div class="listing-full-profile field-value" />').append(
+                $profileLink
+            )
+        );
     }
 
     function onClickSelectedListings(ev) {
@@ -320,14 +315,17 @@
         getMeta(function(err, resp) {
             if (err) {
                 console.log('request failed', err, resp);
-                return alert('request failed');
+                /* ignore error on init because it might be person navigating
+                 * off page if loading takes long */
+                //return alert('request failed');
+                return;
             }
             var data = resp.data[0] || {};
             updateCounts(data);
             $('.wpbdp-listing').each(function(idx, el) {
                 var parts = $(el).attr('id').split('-'),
                     id = parts[parts.length-1];
-                addSelectElementsToListing(el, id, data[id] || {});
+                updateListingElements(el, id, data[id] || {});
             });
         });
     }

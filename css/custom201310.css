@@ -1,23 +1,48 @@
 html {
   margin-top: 0 !important;
 }
-.wpbdp-listing .listing-favorite-btn,
-.wpbdp-listing .listing-more-btn {
-  float: right;
+.wpbdp-listing,
+.wpbdp-listing-excerpt {
+  position: relative;
+}
+.wpbdp-listing .listing-favorite-btn {
+  right: 0;
+  top: -5px;
+}
+.wpbdp-listing-excerpt .listing-favorite-btn,
+.wpbdp-listing .listing-full-profile {
+  position: absolute;
+  top: 0;
+}
+.wpbdp-listing-excerpt.listing-excerpt-expanded .listing-full-profile,
+.wpbdp-listing-excerpt .listing-favorite-btn {
+  right: 0;
+}
+.wpbdp-listing-excerpt.listing-excerpt-expanded .listing-full-profile,
+.wpbdp-listing-excerpt.listing-excerpt-expanded .listing-favorite-btn {
+  top: 10px;
+}
+.wpbdp-listing-excerpt.listing-excerpt-expanded .listing-favorite-btn {
+  right: 200px;
 }
 .wpbdp-listing .listing-favorite-btn .btn,
-.wpbdp-listing .listing-more-btn .btn {
+.wpbdp-listing .listing-full-profile,
+.wpbdp-listing .listing-details .title {
   z-index: 2;
 }
 .wpbdp-listing .listing-favorite-btn .btn-group,
-.wpbdp-listing .listing-more-btn .btn-group {
+.wpbdp-listing .listing-full-profile {
   margin: 10px;
 }
 .wpbdp-listing .listing-favorite-btn .default.btn {
   color: #ccc;
 }
 .wpbdp-listing .listing-details {
-  float: left;
+  width: 80%;
+}
+/* tighten up excerpt listing */
+.wpbdp-listing-excerpt {
+  padding: 0 10px;
 }
 .wpbdp-listing .listing-details .field-value,
 .wpbdp-listing-excerpt .field-value.content {
@@ -29,22 +54,35 @@ html {
 .wpbdp-listing .listing-details .field-value {
   display: none;
 }
-/* minimize excerpt display and use more button to expand */
-.wpbdp-listing-excerpt .listing-details .field-value,
 .wpbdp-listing-excerpt .listing-thumbnail {
+  padding-top: 50px;
+  margin: 0;
+}
+/* minimize excerpt display and use show/hide to expand */
+.wpbdp-listing-excerpt .listing-details .field-value,
+.wpbdp-listing-excerpt .listing-thumbnail,
+.wpbdp-listing-excerpt .listing-full-profile,
+.wpbdp-listing .title .toggle {
   display: none;
 }
-.field-value.wpbdp-field-company.title {
+.wpbdp-listing-excerpt.listing-excerpt-expanded .listing-details .field-value,
+.wpbdp-listing-excerpt.listing-excerpt-expanded .listing-thumbnail,
+.wpbdp-listing-excerpt.listing-excerpt-expanded  .listing-full-profile {
+  display: block;
+}
+.wpbdp-listing-excerpt.listing-excerpt-expanded .listing-details .title .toggle {
   display: inline;
-  float: left;
+}
+.field-value.wpbdp-field-company.title {
+  display: block;
   padding-top: 15px;
 }
 /* show all fields on listing detail page */
 .wpbdp-listing-single .listing-details .field-value {
   display: block;
 }
-/* hide more button on single/detail page */
-.wpbdp-listing-single .listing-more-btn {
+/* hide profile link on single/detail page */
+.wpbdp-listing-single .listing-full-profile {
   display: none;
 }
 /* hide categories they are on separate page */
@@ -82,6 +120,13 @@ form#wpbdmsearchform {
  * small screens
  **/
 @media screen and (max-width: 960px) {
+  .wpbdp-listing-excerpt.listing-excerpt-expanded .listing-details {
+    width: 100%;
+  }
+  /* hide favorite label on mobile */
+  .wpbdp-listing-excerpt .listing-favorite-btn .state-label {
+    display: none;
+  }
   /* remove padding so wbdp buttons fit better at top */
   .fullwidth #column-main .mcolumn-pad {
     padding: 0;
