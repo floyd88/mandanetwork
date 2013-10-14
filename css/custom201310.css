@@ -138,6 +138,7 @@ form#wpbdmsearchform {
   .wpbdp-listing-excerpt.listing-excerpt-expanded .listing-favorite-btn {
     right: 0;
   }
+  .wpbdp-listing .listing-details,
   .wpbdp-listing-excerpt.listing-excerpt-expanded .listing-details {
     width: 100%;
   }
