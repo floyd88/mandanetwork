@@ -157,15 +157,16 @@ form#wpbdmsearchform {
     margin-left: 5px;
   }
   /* on first page put login at the top */
-  .page-id-82 #loginwithajaxwidget-2 {
+  .page-id-2574 #pagelines_content .entry_content p:first-child {
+    padding-bottom: 250px;
+  }
+  .page-id-2574 .widget_loginwithajaxwidget {
     position: absolute;
-    top: 0;
+    top: 90px;
+    left: 10px;
   }
-  .page-id-82 #pagelines_content {
-    padding-top: 200px;
-  }
-  .page-id-82.logged-in #pagelines_content {
-    padding-top: 100px;
+  .page-id-2574.logged-in #pagelines_content p:first-child {
+    padding-bottom: 130px;
   }
 }
 
